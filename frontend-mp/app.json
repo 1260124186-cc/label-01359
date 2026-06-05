@@ -12,7 +12,9 @@
     "pages/order-result/order-result",
     "pages/order-list/order-list",
     "pages/order-detail/order-detail",
-    "pages/subscription/subscription"
+    "pages/subscription/subscription",
+    "pages/quiz/quiz",
+    "pages/quiz-result/quiz-result"
   ],
   "window": {
     "backgroundTextStyle": "dark",

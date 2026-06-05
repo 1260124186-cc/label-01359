@@ -6,10 +6,10 @@
   </view>
 
   <!-- 主内容区域 -->
-  <scroll-view 
-    class="main-content" 
-    scroll-y 
-    enhanced 
+  <scroll-view
+    class="main-content"
+    scroll-y
+    enhanced
     show-scrollbar="{{false}}"
     refresher-enabled
     refresher-triggered="{{refreshing}}"
@@ -17,7 +17,7 @@
   >
     <!-- 轮播图 -->
     <view class="banner-section">
-      <swiper 
+      <swiper
         class="banner-swiper"
         indicator-dots="{{false}}"
         autoplay
@@ -26,16 +26,16 @@
         duration="500"
         bindchange="onBannerChange"
       >
-        <swiper-item 
-          wx:for="{{bannerList}}" 
+        <swiper-item
+          wx:for="{{bannerList}}"
           wx:key="id"
           bindtap="onBannerTap"
           data-item="{{item}}"
         >
           <view class="banner-item">
-            <image 
-              class="banner-image" 
-              src="{{item.imageUrl}}" 
+            <image
+              class="banner-image"
+              src="{{item.imageUrl}}"
               mode="aspectFill"
             />
             <view class="banner-overlay">
@@ -46,8 +46,8 @@
       </swiper>
       <!-- 自定义指示器 -->
       <view class="banner-indicators">
-        <view 
-          wx:for="{{bannerList}}" 
+        <view
+          wx:for="{{bannerList}}"
           wx:key="id"
           class="indicator-dot {{currentBanner === index ? 'active' : ''}}"
         />
@@ -57,8 +57,8 @@
     <!-- 分类入口 -->
     <view class="category-section">
       <view class="category-grid">
-        <view 
-          wx:for="{{categoryEntries}}" 
+        <view
+          wx:for="{{categoryEntries}}"
           wx:key="id"
           class="category-item"
           bindtap="onCategoryTap"
@@ -68,6 +68,20 @@
             <image class="category-icon" src="{{item.icon}}" mode="aspectFit" />
           </view>
           <text class="category-name">{{item.name}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 测评选花入口 -->
+    <view class="quiz-entry" bindtap="onQuizTap">
+      <view class="quiz-entry-bg"></view>
+      <view class="quiz-entry-content">
+        <view class="quiz-entry-left">
+          <text class="quiz-entry-title">🌸 测选专属花艺</text>
+          <text class="quiz-entry-subtitle">4 道题找到最适合你的花</text>
+        </view>
+        <view class="quiz-entry-btn">
+          <text class="quiz-entry-btn-text">开始</text>
         </view>
       </view>
     </view>
@@ -83,8 +97,8 @@
       <view class="section-subtitle">用鲜花诉说爱意</view>
       <scroll-view class="product-scroll" scroll-x enhanced show-scrollbar="{{false}}">
         <view class="product-scroll-inner">
-          <view 
-            wx:for="{{romanticProducts}}" 
+          <view
+            wx:for="{{romanticProducts}}"
             wx:key="id"
             class="scroll-product-item"
             bindtap="onProductTap"
@@ -119,8 +133,8 @@
       <view class="section-subtitle">送上最美的祝福</view>
       <scroll-view class="product-scroll" scroll-x enhanced show-scrollbar="{{false}}">
         <view class="product-scroll-inner">
-          <view 
-            wx:for="{{birthdayProducts}}" 
+          <view
+            wx:for="{{birthdayProducts}}"
             wx:key="id"
             class="scroll-product-item"
             bindtap="onProductTap"
@@ -158,8 +172,8 @@
       </view>
       <view class="section-subtitle">开业大吉 财源广进</view>
       <view class="opening-grid">
-        <view 
-          wx:for="{{openingProducts}}" 
+        <view
+          wx:for="{{openingProducts}}"
           wx:key="id"
           class="opening-item"
           bindtap="onProductTap"
@@ -194,8 +208,8 @@
       </view>
       <view class="section-subtitle">传递真挚的心意</view>
       <view class="blessing-grid">
-        <view 
-          wx:for="{{blessingProducts}}" 
+        <view
+          wx:for="{{blessingProducts}}"
           wx:key="id"
           class="blessing-item"
           bindtap="onProductTap"
@@ -227,8 +241,8 @@
       </view>
       <view class="section-subtitle">大家都在买</view>
       <view class="hot-product-grid">
-        <view 
-          wx:for="{{hotProducts}}" 
+        <view
+          wx:for="{{hotProducts}}"
           wx:key="id"
           class="hot-product-item"
           bindtap="onProductTap"

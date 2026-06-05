@@ -92,6 +92,66 @@
   box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
 }
 
+/* 测评选花入口 */
+.quiz-entry {
+  position: relative;
+  margin: 0 24rpx 24rpx;
+  border-radius: 24rpx;
+  overflow: hidden;
+}
+
+.quiz-entry-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #E91E63 0%, #FF4081 50%, #FF80AB 100%);
+}
+
+.quiz-entry-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28rpx 32rpx;
+}
+
+.quiz-entry-left {
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+
+.quiz-entry-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.quiz-entry-subtitle {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.quiz-entry-btn {
+  padding: 12rpx 36rpx;
+  background-color: rgba(255, 255, 255, 0.25);
+  border-radius: 32rpx;
+  border: 2rpx solid rgba(255, 255, 255, 0.5);
+}
+
+.quiz-entry-btn-text {
+  font-size: 26rpx;
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
+.quiz-entry:active .quiz-entry-bg {
+  opacity: 0.9;
+}
+
 .category-grid {
   display: flex;
   justify-content: space-around;

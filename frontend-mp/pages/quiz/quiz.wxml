@@ -1,0 +1,79 @@
+<view class="quiz-page">
+  <!-- intro -->
+  <view wx:if="{{showIntro}}" class="quiz-intro">
+    <view class="intro-bg">
+      <view class="intro-decor decor-1">🌸</view>
+      <view class="intro-decor decor-2">🌷</view>
+      <view class="intro-decor decor-3">🌹</view>
+      <view class="intro-decor decor-4">💐</view>
+    </view>
+    <view class="intro-content">
+      <view class="intro-emoji">🌺</view>
+      <text class="intro-title">测测哪款花最适合你</text>
+      <text class="intro-subtitle">4 道小问题，找到专属花艺方案</text>
+      <view class="intro-tags">
+        <view class="intro-tag">
+          <text class="intro-tag-emoji">💕</text>
+          <text class="intro-tag-text">关系</text>
+        </view>
+        <view class="intro-tag">
+          <text class="intro-tag-emoji">🌸</text>
+          <text class="intro-tag-text">性格</text>
+        </view>
+        <view class="intro-tag">
+          <text class="intro-tag-emoji">🎨</text>
+          <text class="intro-tag-text">色系</text>
+        </view>
+        <view class="intro-tag">
+          <text class="intro-tag-emoji">🏠</text>
+          <text class="intro-tag-text">风格</text>
+        </view>
+      </view>
+      <view class="intro-btn" bindtap="onStartQuiz">
+        <text class="intro-btn-text">开始测评</text>
+      </view>
+      <text class="intro-hint">约 30 秒完成</text>
+    </view>
+  </view>
+
+  <!-- question flow -->
+  <view wx:if="{{!showIntro}}" class="quiz-flow">
+    <!-- header -->
+    <view class="quiz-header">
+      <view class="back-btn" bindtap="onGoBack">
+        <text class="back-icon">‹</text>
+      </view>
+      <view class="progress-bar">
+        <view class="progress-track">
+          <view class="progress-fill" style="width: {{progress}}%;"></view>
+        </view>
+        <text class="progress-text">{{currentStep + 1}} / {{questions.length}}</text>
+      </view>
+    </view>
+
+    <!-- question content -->
+    <view class="question-area">
+      <text class="question-title">{{currentQuestion.title}}</text>
+      <text class="question-subtitle">{{currentQuestion.subtitle}}</text>
+
+      <view class="options-grid">
+        <view
+          wx:for="{{currentOptions}}"
+          wx:key="id"
+          class="option-card {{selectedOption === item.id ? 'selected' : ''}}"
+          bindtap="onSelectOption"
+          data-id="{{item.id}}"
+        >
+          <view class="option-emoji-wrapper">
+            <text class="option-emoji">{{item.emoji}}</text>
+          </view>
+          <view class="option-text-wrapper">
+            <text class="option-text">{{item.text}}</text>
+            <text class="option-desc">{{item.desc}}</text>
+          </view>
+          <view wx:if="{{selectedOption === item.id}}" class="option-check">✓</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

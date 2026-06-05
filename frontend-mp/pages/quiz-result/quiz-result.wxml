@@ -1,0 +1,108 @@
+<view class="result-page">
+  <!-- loading -->
+  <view wx:if="{{loading}}" class="loading-container">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">正在为你匹配专属方案...</text>
+  </view>
+
+  <!-- result content -->
+  <view wx:if="{{!loading}}" class="result-content">
+    <scroll-view class="result-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+      <!-- personality card -->
+      <view class="personality-card">
+        <view class="personality-bg">
+          <view class="bg-circle circle-1"></view>
+          <view class="bg-circle circle-2"></view>
+          <view class="bg-circle circle-3"></view>
+        </view>
+        <view class="personality-content">
+          <text class="personality-label">你的花艺性格</text>
+          <text class="personality-title">{{personality}}</text>
+          <text class="personality-desc">{{description}}</text>
+        </view>
+      </view>
+
+      <!-- recommended products -->
+      <view class="section">
+        <view class="section-header">
+          <view class="section-icon">💐</view>
+          <text class="section-title">为你推荐 3 款花艺方案</text>
+        </view>
+
+        <view class="product-list">
+          <view
+            wx:for="{{products}}"
+            wx:key="id"
+            class="product-card"
+            bindtap="onProductTap"
+            data-item="{{item}}"
+          >
+            <view class="product-rank">{{index + 1}}</view>
+            <view class="product-image-wrapper">
+              <image class="product-image" src="{{item.imageUrl}}" mode="aspectFill" />
+              <view wx:if="{{item.stock <= 0}}" class="sold-out-overlay">
+                <text class="sold-out-text">售罄</text>
+              </view>
+            </view>
+            <view class="product-info">
+              <text class="product-name">{{item.name}}</text>
+              <text class="product-subtitle">{{item.subtitle}}</text>
+              <view class="product-bottom">
+                <view class="product-price">
+                  <text class="price-symbol">¥</text>
+                  <text class="price-value">{{item.price}}</text>
+                  <text wx:if="{{item.originalPrice}}" class="price-original">¥{{item.originalPrice}}</text>
+                </view>
+                <view
+                  wx:if="{{item.stock > 0}}"
+                  class="add-cart-btn"
+                  catchtap="onAddToCart"
+                  data-item="{{item}}"
+                >
+                  <text class="add-cart-icon">+</text>
+                </view>
+                <view
+                  wx:elif="{{item.stock <= 0}}"
+                  class="restock-hint"
+                  catchtap="onProductTap"
+                  data-item="{{item}}"
+                >
+                  <text class="restock-icon">🔔</text>
+                </view>
+              </view>
+            </view>
+            <!-- reason -->
+            <view wx:if="{{reasons[index]}}" class="product-reason">
+              <view class="reason-icon">💡</view>
+              <text class="reason-text">{{reasons[index]}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- share section -->
+      <view class="share-section">
+        <view class="share-card">
+          <view class="share-emoji">🌸</view>
+          <text class="share-title">分享给你的朋友</text>
+          <text class="share-desc">让TA也来测测专属花艺性格</text>
+          <button class="share-btn" open-type="share">
+            <text class="share-btn-text">分享给好友</text>
+          </button>
+        </view>
+      </view>
+
+      <!-- actions -->
+      <view class="action-bar">
+        <view class="action-btn action-btn-secondary" bindtap="onRetake">
+          <text class="action-btn-text-secondary">重新测评</text>
+        </view>
+        <view class="action-btn action-btn-primary" bindtap="onGoHome">
+          <text class="action-btn-text-primary">回到首页</text>
+        </view>
+      </view>
+
+      <view class="bottom-safe-area"></view>
+    </scroll-view>
+  </view>
+</view>

@@ -421,6 +421,220 @@ function simulatePriceDropNotification() {
   return notifications;
 }
 
+var quizQuestions = [
+  {
+    id: 'relation',
+    title: '送花给谁？',
+    subtitle: '这份花意将送给最重要的TA',
+    options: [
+      { id: 'lover', text: '恋人', emoji: '💕', desc: '浪漫告白' },
+      { id: 'family', text: '家人', emoji: '🏠', desc: '温暖关怀' },
+      { id: 'friend', text: '朋友', emoji: '🤝', desc: '真挚友情' },
+      { id: 'self', text: '自己', emoji: '✨', desc: '犒赏自我' }
+    ]
+  },
+  {
+    id: 'personality',
+    title: 'TA的性格更偏向？',
+    subtitle: '了解TA的内心世界',
+    options: [
+      { id: 'gentle', text: '温柔细腻', emoji: '🌸', desc: '柔软如花瓣' },
+      { id: 'lively', text: '活泼开朗', emoji: '🌞', desc: '阳光般热情' },
+      { id: 'reserved', text: '内敛沉稳', emoji: '🎋', desc: '淡雅有深度' },
+      { id: 'romantic', text: '浪漫多情', emoji: '🌙', desc: '诗意生活家' }
+    ]
+  },
+  {
+    id: 'color',
+    title: '偏好的色系？',
+    subtitle: '选择让TA心动的色彩',
+    options: [
+      { id: 'warm', text: '暖色系', emoji: '🔥', desc: '红·橙·金黄' },
+      { id: 'cool', text: '冷色系', emoji: '❄️', desc: '蓝·紫·薄荷' },
+      { id: 'pink', text: '粉嫩系', emoji: '🌷', desc: '粉·桃·淡樱' },
+      { id: 'neutral', text: '百搭系', emoji: '🤍', desc: '白·绿·米色' }
+    ]
+  },
+  {
+    id: 'room',
+    title: '房间的风格？',
+    subtitle: '花与空间的美学搭配',
+    options: [
+      { id: 'nordic', text: '简约北欧', emoji: '🧊', desc: '干净利落' },
+      { id: 'pastoral', text: '温馨田园', emoji: '🏡', desc: '自然清新' },
+      { id: 'luxury', text: '现代轻奢', emoji: '💎', desc: '精致品味' },
+      { id: 'japanese', text: '清新日式', emoji: '🎍', desc: '禅意留白' }
+    ]
+  }
+];
+
+var quizRecommendations = {
+  'lover-gentle-pink-nordic': {
+    personality: '温柔浪漫的北欧恋人',
+    description: '你追求简洁而精致的爱，温暖而不张扬',
+    products: [1001, 1002, 5001],
+    reasons: [
+      '99朵红玫瑰的热烈与你的温柔形成完美互补',
+      '33朵粉玫瑰的柔和色调契合你的审美品味',
+      '永生花的永恒特质，如同北欧风的经典隽永'
+    ]
+  },
+  'lover-gentle-pink-pastoral': {
+    personality: '田园诗意中的温柔恋人',
+    description: '你向往自然而浪漫的温情，爱在细节中绽放',
+    products: [1002, 4001, 2001],
+    reasons: [
+      '粉玫瑰的柔美与田园风的自然气息相得益彰',
+      '康乃馨百合花束的温暖氛围，如同田园般惬意',
+      '向日葵混搭花束带来阳光般温暖的陪伴感'
+    ]
+  },
+  'lover-lively-warm-luxury': {
+    personality: '热情奔放的轻奢恋人',
+    description: '你用炽热的爱意点亮精致生活',
+    products: [1001, 5001, 3001],
+    reasons: [
+      '99朵红玫瑰的盛大浪漫，彰显你的热烈与品位',
+      '永生花礼盒的限定品质，与轻奢风格完美匹配',
+      '豪华花篮的大气排面，为爱加冕'
+    ]
+  },
+  'lover-romantic-pink-japanese': {
+    personality: '浪漫禅意的日式恋人',
+    description: '你在留白中寻找爱的诗意，细腻而深情',
+    products: [1002, 5001, 2001],
+    reasons: [
+      '粉玫瑰的柔和与日式美学的淡雅不谋而合',
+      '永生花的永恒禅意，正如你对爱的珍视',
+      '向日葵的简约线条感，与日式空间和谐共生'
+    ]
+  },
+  'family-gentle-warm-pastoral': {
+    personality: '温暖顾家的田园守护者',
+    description: '你用无微不至的关怀编织家的温馨',
+    products: [4001, 2001, 1002],
+    reasons: [
+      '康乃馨百合花束是最经典的家人关怀之选',
+      '向日葵的温暖阳光，带来家的安心感',
+      '粉玫瑰的柔美为家中增添温馨氛围'
+    ]
+  },
+  'family-reserved-neutral-nordic': {
+    personality: '沉稳内敛的北欧家长',
+    description: '你以含蓄而深远的方式表达关爱',
+    products: [4001, 2001, 5002],
+    reasons: [
+      '康乃馨的低调温柔，恰如你不张扬的关爱',
+      '向日葵的简洁线条与北欧空间完美融合',
+      '郁金香的素雅气质，契合内敛的审美'
+    ]
+  },
+  'friend-lively-warm-pastoral': {
+    personality: '热情阳光的知心挚友',
+    description: '你是朋友圈的温暖中心，带来欢笑与正能量',
+    products: [2001, 1002, 4001],
+    reasons: [
+      '向日葵混搭花束正如你阳光般的友谊',
+      '粉玫瑰为友谊增添一抹甜蜜的温度',
+      '康乃馨百合的温馨搭配，象征真挚长久的友情'
+    ]
+  },
+  'friend-lively-cool-japanese': {
+    personality: '清新洒脱的日式好友',
+    description: '你以独特的方式诠释友情，清冷而有温度',
+    products: [5002, 2001, 4001],
+    reasons: [
+      '郁金香的清雅气质与你的独特品味相配',
+      '向日葵在日式空间中展现清爽的友谊之美',
+      '百合的淡雅芬芳，适合品味独特的挚友'
+    ]
+  },
+  'self-gentle-pink-japanese': {
+    personality: '诗意独处的日式美学',
+    description: '你懂得犒赏自己，在留白中感受生活之美',
+    products: [1002, 5002, 5001],
+    reasons: [
+      '粉玫瑰是给自己最温柔的礼物',
+      '郁金香的素雅与日式空间和谐共鸣',
+      '永生花的永恒之美，犒赏值得被珍惜的自己'
+    ]
+  },
+  'self-romantic-warm-luxury': {
+    personality: '精致悦己的轻奢生活家',
+    description: '你用仪式感点亮日常，活出品质与品味',
+    products: [1001, 5001, 1002],
+    reasons: [
+      '99朵红玫瑰是对自己最隆重的告白',
+      '永生花礼盒的限定品质，犒赏不将就的你',
+      '粉玫瑰为日常增添浪漫的小确幸'
+    ]
+  },
+  'self-reserved-neutral-nordic': {
+    personality: '简约从容的北欧独居者',
+    description: '你在简洁中找到安宁，以节制表达自我',
+    products: [5002, 2001, 4001],
+    reasons: [
+      '郁金香的简约线条与北欧空间相得益彰',
+      '向日葵为极简空间注入恰到好处的生机',
+      '康乃馨的低调美感，适合不张扬的品味'
+    ]
+  },
+  'self-lively-pink-pastoral': {
+    personality: '热爱生活的田园女孩',
+    description: '你将日子过成诗，每一刻都充满色彩',
+    products: [2001, 1002, 4001],
+    reasons: [
+      '向日葵的灿烂是你生活态度的最佳代言',
+      '粉玫瑰为田园小屋增添浪漫情调',
+      '康乃馨百合的芬芳，让家充满生机'
+    ]
+  }
+};
+
+var quizDefaultRecommendation = {
+  personality: '自在随心的花艺爱好者',
+  description: '你拥有独特而多元的审美，每一种花都值得被欣赏',
+  products: [2001, 4001, 1002],
+  reasons: [
+    '向日葵混搭花束适合任何场景，百搭不踩雷',
+    '康乃馨百合花束温暖治愈，是万金油之选',
+    '粉玫瑰柔美百搭，无论送谁都不会出错'
+  ]
+};
+
+function getQuizRecommendation(answers) {
+  var key = [answers.relation, answers.personality, answers.color, answers.room].join('-');
+  if (quizRecommendations[key]) {
+    return Object.assign({}, quizRecommendations[key], {
+      products: quizRecommendations[key].products.map(function(id) {
+        return productList.find(function(p) { return p.id === id; });
+      }).filter(Boolean)
+    });
+  }
+  var partialKeys = [
+    [answers.relation, answers.personality, answers.color].join('-'),
+    [answers.relation, answers.personality].join('-'),
+    [answers.relation].join('-')
+  ];
+  for (var i = 0; i < partialKeys.length; i++) {
+    var matched = Object.keys(quizRecommendations).find(function(k) {
+      return k.indexOf(partialKeys[i]) === 0;
+    });
+    if (matched) {
+      return Object.assign({}, quizRecommendations[matched], {
+        products: quizRecommendations[matched].products.map(function(id) {
+          return productList.find(function(p) { return p.id === id; });
+        }).filter(Boolean)
+      });
+    }
+  }
+  return Object.assign({}, quizDefaultRecommendation, {
+    products: quizDefaultRecommendation.products.map(function(id) {
+      return productList.find(function(p) { return p.id === id; });
+    }).filter(Boolean)
+  });
+}
+
 module.exports = {
   bannerList,
   categoryEntries,
@@ -439,5 +653,9 @@ module.exports = {
   getSubscriptions,
   isSubscribed,
   simulateRestockNotification,
-  simulatePriceDropNotification
+  simulatePriceDropNotification,
+  quizQuestions,
+  quizRecommendations,
+  quizDefaultRecommendation,
+  getQuizRecommendation
 };

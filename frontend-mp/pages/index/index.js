@@ -51,7 +51,7 @@ Page({
     var that = this;
     return new Promise(function(resolve, reject) {
       that.setData({ loading: true, error: null });
-      
+
       setTimeout(function() {
         try {
           var bannerList = mockData.bannerList;
@@ -61,7 +61,7 @@ Page({
               salesText: util.formatSales(p.sales)
             });
           });
-          
+
           that.setData({
             bannerList: bannerList,
             categoryEntries: categoryEntries,
@@ -123,6 +123,13 @@ Page({
     });
   },
 
+  // 点击测评选花入口
+  onQuizTap: function() {
+    wx.navigateTo({
+      url: '/pages/quiz/quiz'
+    });
+  },
+
   // 查看更多
   onViewMore: function(e) {
     var category = e.currentTarget.dataset.category;
@@ -144,21 +151,21 @@ Page({
   onAddToCart: function(e) {
     var item = e.currentTarget.dataset.item;
     var that = this;
-    
+
     if (!item) return;
-    
+
     // 检查库存
     if (item.stock <= 0) {
       app.showToast('商品已售罄');
       return;
     }
-    
+
     // 检查登录状态
     if (!app.globalData.isLogin) {
       that.showLoginModal();
       return;
     }
-    
+
     try {
       var cart = wx.getStorageSync('cart') || [];
       var existIndex = -1;
@@ -168,7 +175,7 @@ Page({
           break;
         }
       }
-      
+
       if (existIndex > -1) {
         // 检查加购后是否超过库存
         if (cart[existIndex].quantity + 1 > item.stock) {
@@ -179,10 +186,10 @@ Page({
       } else {
         cart.push(Object.assign({}, item, { quantity: 1, selected: true }));
       }
-      
+
       wx.setStorageSync('cart', cart);
       that.updateCartBadge();
-      
+
       wx.showToast({
         title: '加入购物车成功',
         icon: 'success',
@@ -214,10 +221,10 @@ Page({
                 var userInfo = mockData.userInfo;
                 wx.setStorageSync('userInfo', userInfo);
                 wx.setStorageSync('token', 'mock_token_' + Date.now());
-                
+
                 app.globalData.isLogin = true;
                 app.globalData.userInfo = userInfo;
-                
+
                 that.updateCartBadge();
                 app.showToast('登录成功', 'success');
               }
