@@ -1,5 +1,14 @@
 <!--pages/order-confirm/order-confirm.wxml - 订单确认页-->
 <view class="page-container">
+  <!-- 复购信息横幅 -->
+  <view wx:if="{{fromRepurchase}}" class="repurchase-banner">
+    <text class="repurchase-banner-icon">🔄</text>
+    <view class="repurchase-banner-info">
+      <text class="repurchase-banner-title">{{isUpgrade ? '升级复购' : '一键复购'}}</text>
+      <text wx:if="{{occasionName}}" class="repurchase-banner-occasion">{{occasionName}} · 送给{{recipientName}}</text>
+    </view>
+  </view>
+
   <!-- 收货地址 -->
   <view class="address-section">
     <view wx:if="{{address}}" class="address-content">
@@ -7,6 +16,7 @@
         <view class="address-user">
           <text class="user-name">{{address.name}}</text>
           <text class="user-phone">{{address.phone}}</text>
+          <view wx:if="{{fromRepurchase}}" class="auto-fill-tag">自动填入</view>
         </view>
         <view class="address-detail">
           {{address.province}}{{address.city}}{{address.district}}{{address.detail}}
@@ -41,12 +51,37 @@
     </view>
   </view>
 
+  <!-- 贺卡模板 -->
+  <view class="greeting-card-section">
+    <view class="greeting-card-header" bindtap="onToggleGreetingCard">
+      <view class="greeting-card-title-row">
+        <text class="greeting-card-icon">💌</text>
+        <text class="greeting-card-title">贺卡祝福</text>
+      </view>
+      <text class="greeting-card-toggle">{{showGreetingCard ? '收起' : '展开'}}</text>
+    </view>
+    <view wx:if="{{showGreetingCard}}" class="greeting-card-body">
+      <view wx:if="{{greetingCard}}" class="greeting-card-preview" style="background: {{greetingCard.bgGradient}};">
+        <text class="greeting-card-name">{{greetingCard.name}}</text>
+        <text class="greeting-card-default">{{greetingCard.content}}</text>
+      </view>
+      <textarea
+        class="greeting-card-input"
+        value="{{greetingContent}}"
+        bindinput="onGreetingContentInput"
+        maxlength="100"
+        placeholder="请输入祝福语..."
+      />
+      <text class="greeting-card-count">{{greetingContent.length}}/100</text>
+    </view>
+  </view>
+
   <!-- 订单备注 -->
   <view class="remark-section">
     <text class="remark-label">订单备注</text>
-    <input 
-      class="remark-input" 
-      placeholder="选填，请输入备注信息" 
+    <input
+      class="remark-input"
+      placeholder="选填，请输入备注信息"
       value="{{remark}}"
       bindinput="onRemarkInput"
     />
@@ -62,6 +97,10 @@
       <text class="price-label">运费</text>
       <text class="price-value">{{freight > 0 ? '¥' + freight : '免运费'}}</text>
     </view>
+    <view wx:if="{{showGreetingCard}}" class="price-row">
+      <text class="price-label">贺卡</text>
+      <text class="price-value">免费</text>
+    </view>
   </view>
 
   <!-- 底部占位 -->
@@ -75,7 +114,7 @@
       <text class="total-price">{{totalPrice}}</text>
     </view>
     <view class="submit-btn" bindtap="onSubmitOrder">
-      <text>提交订单</text>
+      <text>{{fromRepurchase ? '确认复购' : '提交订单'}}</text>
     </view>
   </view>
 </view>

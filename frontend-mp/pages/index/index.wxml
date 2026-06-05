@@ -86,6 +86,24 @@
       </view>
     </view>
 
+    <!-- 去年今日一键复购入口 -->
+    <view class="repurchase-entry" bindtap="onRepurchaseTap">
+      <view class="repurchase-entry-bg"></view>
+      <view class="repurchase-entry-content">
+        <view class="repurchase-entry-left">
+          <text class="repurchase-entry-title">🔔 去年今日·一键复购</text>
+          <text wx:if="{{repurchaseReminder}}" class="repurchase-entry-subtitle">{{repurchaseReminder.occasionEmoji}} {{repurchaseReminder.occasionName}}{{repurchaseReminder.displayText}} · 去年送「{{repurchaseReminder.productName}}」给{{repurchaseReminder.recipientName}}</text>
+          <text wx:else class="repurchase-entry-subtitle">基于历史订单，智能推荐节日复购</text>
+        </view>
+        <view class="repurchase-entry-right">
+          <view wx:if="{{repurchaseNearCount > 0}}" class="repurchase-badge">{{repurchaseNearCount}}</view>
+          <view class="repurchase-entry-btn">
+            <text class="repurchase-entry-btn-text">去复购</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
     <!-- 浪漫告白专区 -->
     <view class="section romantic-section">
       <view class="section-header">

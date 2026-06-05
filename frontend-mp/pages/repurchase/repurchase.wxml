@@ -1,0 +1,198 @@
+<view class="page-container">
+  <view class="header-section">
+    <view class="header-bg"></view>
+    <view class="header-content">
+      <text class="header-title">🔔 去年今日·一键复购</text>
+      <text class="header-subtitle">基于您的历史订单，智能推荐节日复购</text>
+    </view>
+  </view>
+
+  <view wx:if="{{upcomingFestivals.length > 0}}" class="festival-section">
+    <view class="section-label">
+      <text class="section-label-icon">📅</text>
+      <text class="section-label-text">即将到来的节日</text>
+    </view>
+    <scroll-view class="festival-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+      <view class="festival-scroll-inner">
+        <view
+          wx:for="{{upcomingFestivals}}"
+          wx:key="id"
+          class="festival-chip"
+        >
+          <text class="festival-emoji">{{item.emoji}}</text>
+          <text class="festival-name">{{item.name}}</text>
+          <text class="festival-days">{{item.displayText}}</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <view wx:if="{{nearRecommendations.length > 0}}" class="recommend-section">
+    <view class="section-label">
+      <text class="section-label-icon">✨</text>
+      <text class="section-label-text">节日临近，推荐复购</text>
+    </view>
+    <view class="recommend-list">
+      <view
+        wx:for="{{nearRecommendations}}"
+        wx:key="historicalOrder.id"
+        class="recommend-card"
+      >
+        <view class="recommend-occasion">
+          <view class="occasion-badge">
+            <text class="occasion-emoji">{{item.occasionEmoji}}</text>
+            <text class="occasion-name">{{item.occasionName}}</text>
+          </view>
+          <view class="occasion-date-badge {{item.daysAway <= 3 ? 'urgent' : ''}}">
+            <text>{{item.displayDate}} · {{item.displayText}}</text>
+          </view>
+        </view>
+
+        <view class="recommend-recipient">
+          <text class="recipient-icon">👤</text>
+          <text class="recipient-name">收件人：{{item.historicalOrder.recipientName}}</text>
+          <text class="recipient-phone">{{item.historicalOrder.recipientPhone}}</text>
+        </view>
+
+        <view class="recommend-products">
+          <view class="product-compare">
+            <view class="compare-item original" bindtap="onProductTap" data-id="{{item.originalProduct.id}}">
+              <image class="compare-image" src="{{item.originalProduct.imageUrl}}" mode="aspectFill" />
+              <view class="compare-info">
+                <text class="compare-label">去年同款</text>
+                <text class="compare-name">{{item.originalProduct.name}}</text>
+                <text class="compare-subtitle">{{item.originalProduct.subtitle}}</text>
+                <view class="compare-price">
+                  <text class="price-symbol">¥</text>
+                  <text class="price-value">{{item.originalProduct.price}}</text>
+                </view>
+              </view>
+            </view>
+            <view wx:if="{{item.upgradedProduct}}" class="compare-arrow">
+              <text class="arrow-icon">→</text>
+              <text class="arrow-text">升级</text>
+            </view>
+            <view wx:if="{{item.upgradedProduct}}" class="compare-item upgraded" bindtap="onProductTap" data-id="{{item.upgradedProduct.id}}">
+              <image class="compare-image" src="{{item.upgradedProduct.imageUrl}}" mode="aspectFill" />
+              <view class="compare-info">
+                <text class="compare-label upgrade-label">✨ 升级款</text>
+                <text class="compare-name">{{item.upgradedProduct.name}}</text>
+                <text class="compare-subtitle">{{item.upgradedProduct.subtitle}}</text>
+                <view class="compare-price">
+                  <text class="price-symbol">¥</text>
+                  <text class="price-value">{{item.upgradedProduct.price}}</text>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <view wx:if="{{item.greetingCard}}" class="recommend-card-preview" bindtap="onPreviewCard" data-index="{{index}}">
+          <view class="card-preview-label">
+            <text>💌 贺卡预览</text>
+            <text class="card-edit-hint">点击编辑</text>
+          </view>
+          <view class="card-preview-content" style="background: {{item.greetingCard.bgGradient}};">
+            <text class="card-preview-name">{{item.greetingCard.name}}</text>
+            <text class="card-preview-text">{{item.historicalOrder.greetingCardContent}}</text>
+          </view>
+        </view>
+
+        <view wx:if="{{item.address}}" class="recommend-address">
+          <text class="address-icon">📍</text>
+          <text class="address-text">{{item.address.name}} {{item.address.phone}} {{item.address.province}}{{item.address.city}}{{item.address.district}}{{item.address.detail}}</text>
+          <text class="address-auto">自动填入</text>
+        </view>
+
+        <view class="recommend-actions">
+          <view class="action-btn repurchase-btn" bindtap="onOneKeyRepurchase" data-index="{{index}}">
+            <text class="action-btn-icon">🔄</text>
+            <text>复购同款</text>
+          </view>
+          <view wx:if="{{item.upgradedProduct}}" class="action-btn upgrade-btn" bindtap="onUpgradeRepurchase" data-index="{{index}}">
+            <text class="action-btn-icon">⬆️</text>
+            <text>升级复购</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="history-section">
+    <view class="section-label">
+      <text class="section-label-icon">📜</text>
+      <text class="section-label-text">全部复购记录</text>
+    </view>
+    <view class="history-list">
+      <view
+        wx:for="{{recommendations}}"
+        wx:key="historicalOrder.id"
+        class="history-item {{item.isNear ? 'near' : ''}}"
+      >
+        <view class="history-left">
+          <text class="history-emoji">{{item.occasionEmoji}}</text>
+        </view>
+        <view class="history-center">
+          <view class="history-top-row">
+            <text class="history-occasion">{{item.occasionName}}</text>
+            <text class="history-date">{{item.displayDate}}</text>
+          </view>
+          <text class="history-product">{{item.historicalOrder.productName}}</text>
+          <text class="history-recipient">送：{{item.historicalOrder.recipientName}}</text>
+        </view>
+        <view class="history-right">
+          <view class="history-status {{item.isNear ? 'status-near' : 'status-far'}}">
+            <text>{{item.displayText}}</text>
+          </view>
+          <view class="history-repurchase-btn" bindtap="onOneKeyRepurchase" data-index="{{index}}">
+            <text>复购</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="bottom-safe-area"></view>
+
+  <view wx:if="{{showCardModal}}" class="modal-overlay" bindtap="onCloseCardModal">
+    <view class="modal-content" catchtap="">
+      <view class="modal-header">
+        <text class="modal-title">💌 选择贺卡模板</text>
+        <view class="modal-close" bindtap="onCloseCardModal">
+          <text>✕</text>
+        </view>
+      </view>
+      <scroll-view class="card-list" scroll-y>
+        <view
+          wx:for="{{cardOptions}}"
+          wx:key="id"
+          class="card-option {{selectedCard.id === item.id ? 'selected' : ''}}"
+          bindtap="onSelectCard"
+          data-id="{{item.id}}"
+        >
+          <view class="card-option-preview" style="background: {{item.bgGradient}};">
+            <text class="card-option-name">{{item.name}}</text>
+            <text class="card-option-text">{{item.content}}</text>
+          </view>
+          <view wx:if="{{selectedCard.id === item.id}}" class="card-option-check">✓</view>
+        </view>
+      </scroll-view>
+      <view class="card-edit-section">
+        <text class="card-edit-label">编辑祝福语</text>
+        <textarea
+          class="card-edit-input"
+          value="{{selectedCard.content}}"
+          bindinput="onEditCardContent"
+          maxlength="100"
+          placeholder="请输入祝福语"
+        />
+        <text class="card-edit-count">{{selectedCard.content.length}}/100</text>
+      </view>
+      <view class="modal-footer">
+        <view class="modal-btn confirm-btn" bindtap="onConfirmCard">
+          <text>确认选择</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

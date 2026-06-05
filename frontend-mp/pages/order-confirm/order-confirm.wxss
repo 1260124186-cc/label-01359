@@ -7,6 +7,39 @@
   padding-bottom: 140rpx;
 }
 
+/* 复购横幅 */
+.repurchase-banner {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 24rpx 28rpx;
+  margin-bottom: 20rpx;
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+  border-radius: 16rpx;
+}
+
+.repurchase-banner-icon {
+  font-size: 36rpx;
+}
+
+.repurchase-banner-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.repurchase-banner-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.repurchase-banner-occasion {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.85);
+}
+
 /* 地址区域 */
 .address-section {
   background-color: #FFFFFF;
@@ -41,6 +74,14 @@
 .user-phone {
   font-size: 28rpx;
   color: #666666;
+}
+
+.auto-fill-tag {
+  padding: 2rpx 12rpx;
+  font-size: 20rpx;
+  color: #4CAF50;
+  background-color: rgba(76, 175, 80, 0.1);
+  border-radius: 8rpx;
 }
 
 .address-detail {
@@ -161,6 +202,87 @@
 .goods-quantity {
   font-size: 26rpx;
   color: #999999;
+}
+
+/* 贺卡区域 */
+.greeting-card-section {
+  background-color: #FFFFFF;
+  margin-bottom: 20rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+
+.greeting-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28rpx 32rpx;
+}
+
+.greeting-card-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.greeting-card-icon {
+  font-size: 32rpx;
+}
+
+.greeting-card-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333333;
+}
+
+.greeting-card-toggle {
+  font-size: 26rpx;
+  color: #E91E63;
+}
+
+.greeting-card-body {
+  padding: 0 32rpx 28rpx;
+}
+
+.greeting-card-preview {
+  padding: 24rpx 20rpx;
+  border-radius: 12rpx;
+  margin-bottom: 20rpx;
+}
+
+.greeting-card-name {
+  display: block;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #FFFFFF;
+  margin-bottom: 10rpx;
+}
+
+.greeting-card-default {
+  display: block;
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.5;
+}
+
+.greeting-card-input {
+  width: 100%;
+  height: 140rpx;
+  padding: 20rpx;
+  background-color: #FAFAFA;
+  border-radius: 12rpx;
+  font-size: 26rpx;
+  color: #333333;
+  line-height: 1.5;
+  box-sizing: border-box;
+}
+
+.greeting-card-count {
+  display: block;
+  text-align: right;
+  font-size: 22rpx;
+  color: #CCCCCC;
+  margin-top: 8rpx;
 }
 
 /* 备注区域 */

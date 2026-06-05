@@ -14,7 +14,8 @@
     "pages/order-detail/order-detail",
     "pages/subscription/subscription",
     "pages/quiz/quiz",
-    "pages/quiz-result/quiz-result"
+    "pages/quiz-result/quiz-result",
+    "pages/repurchase/repurchase"
   ],
   "window": {
     "backgroundTextStyle": "dark",

@@ -13,6 +13,8 @@ Page({
     openingProducts: [],
     blessingProducts: [],
     hotProducts: [],
+    repurchaseReminder: null,
+    repurchaseNearCount: 0,
     loading: true,
     refreshing: false,
     error: null
@@ -24,6 +26,7 @@ Page({
 
   onShow: function() {
     this.updateCartBadge();
+    this.loadRepurchaseData();
   },
 
   onPullDownRefresh: function() {
@@ -127,6 +130,41 @@ Page({
   onQuizTap: function() {
     wx.navigateTo({
       url: '/pages/quiz/quiz'
+    });
+  },
+
+  // 加载复购提醒数据
+  loadRepurchaseData: function() {
+    try {
+      var recommendations = mockData.getRepurchaseRecommendations();
+      var nearItems = recommendations.filter(function(r) {
+        return r.isNear;
+      });
+      var reminder = null;
+      if (nearItems.length > 0) {
+        var first = nearItems[0];
+        reminder = {
+          message: first.occasionEmoji + ' ' + first.occasionName + '（' + first.displayDate + '）即将到来',
+          productName: first.historicalOrder.productName,
+          recipientName: first.historicalOrder.recipientName,
+          occasionName: first.occasionName,
+          occasionEmoji: first.occasionEmoji,
+          displayText: first.displayText
+        };
+      }
+      this.setData({
+        repurchaseReminder: reminder,
+        repurchaseNearCount: nearItems.length
+      });
+    } catch (e) {
+      console.error('加载复购数据失败:', e);
+    }
+  },
+
+  // 点击复购入口
+  onRepurchaseTap: function() {
+    wx.navigateTo({
+      url: '/pages/repurchase/repurchase'
     });
   },
 

@@ -23,6 +23,7 @@ App({
     this.checkLoginStatus();
     this.getSystemInfo();
     this.checkPendingNotifications();
+    this.checkRepurchaseReminders();
   },
 
   // 初始化本地存储
@@ -123,5 +124,28 @@ App({
   // 隐藏 Loading
   hideLoading: function() {
     wx.hideLoading();
+  },
+
+  // 检查复购提醒
+  checkRepurchaseReminders: function() {
+    try {
+      if (!this.globalData.isLogin) return;
+      var mockData = require('./mock/data.js');
+      var recommendations = mockData.getRepurchaseRecommendations();
+      var nearItems = recommendations.filter(function(r) {
+        return r.isNear && r.daysAway >= 0 && r.daysAway <= 7;
+      });
+      if (nearItems.length > 0) {
+        var first = nearItems[0];
+        var message = first.occasionEmoji + ' ' + first.occasionName + '即将到来，去年送出的「' + first.historicalOrder.productName + '」可一键复购！';
+        wx.setStorageSync('repurchaseReminder', {
+          message: message,
+          recommendation: first,
+          time: new Date().toLocaleString()
+        });
+      }
+    } catch (e) {
+      console.error('检查复购提醒失败:', e);
+    }
   }
 });

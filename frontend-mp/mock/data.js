@@ -635,6 +635,338 @@ function getQuizRecommendation(answers) {
   });
 }
 
+var festivalList = [
+  {
+    id: 'valentines',
+    name: '情人节',
+    date: '02-14',
+    category: 'romantic',
+    emoji: '💝',
+    description: '浪漫告白，用鲜花传递爱意',
+    advanceDays: 7
+  },
+  {
+    id: 'womens-day',
+    name: '女神节',
+    date: '03-08',
+    category: 'blessing',
+    emoji: '🌺',
+    description: '致敬最美的她',
+    advanceDays: 5
+  },
+  {
+    id: 'mothers-day',
+    name: '母亲节',
+    date: '05-11',
+    category: 'blessing',
+    emoji: '🌸',
+    description: '感恩母爱，送上一束康乃馨',
+    advanceDays: 7
+  },
+  {
+    id: '520',
+    name: '520告白日',
+    date: '05-20',
+    category: 'romantic',
+    emoji: '💕',
+    description: '我爱你，用鲜花说出心声',
+    advanceDays: 5
+  },
+  {
+    id: 'childrens-day',
+    name: '儿童节',
+    date: '06-01',
+    category: 'blessing',
+    emoji: '🎈',
+    description: '快乐童年，缤纷花礼',
+    advanceDays: 3
+  },
+  {
+    id: 'qixi',
+    name: '七夕节',
+    date: '08-29',
+    category: 'romantic',
+    emoji: '🌌',
+    description: '鹊桥相会，花好月圆',
+    advanceDays: 7
+  },
+  {
+    id: 'teachers-day',
+    name: '教师节',
+    date: '09-10',
+    category: 'blessing',
+    emoji: '📖',
+    description: '师恩难忘，鲜花致敬',
+    advanceDays: 5
+  },
+  {
+    id: 'national-day',
+    name: '国庆节',
+    date: '10-01',
+    category: 'opening',
+    emoji: '🇨🇳',
+    description: '举国同庆，花篮献礼',
+    advanceDays: 5
+  },
+  {
+    id: 'christmas',
+    name: '圣诞节',
+    date: '12-25',
+    category: 'romantic',
+    emoji: '🎄',
+    description: '温馨圣诞，浪漫花礼',
+    advanceDays: 7
+  },
+  {
+    id: 'new-year',
+    name: '元旦',
+    date: '01-01',
+    category: 'blessing',
+    emoji: '🎆',
+    description: '新年新气象，鲜花送祝福',
+    advanceDays: 5
+  }
+];
+
+var greetingCardTemplates = [
+  {
+    id: 'love-1',
+    name: '深情告白',
+    category: 'romantic',
+    content: '亲爱的，时光飞逝，又是一年。愿这束花如我对你的爱，永不凋零。',
+    bgGradient: 'linear-gradient(135deg, #FF6B9D 0%, #FF4081 100%)'
+  },
+  {
+    id: 'love-2',
+    name: '甜蜜思念',
+    category: 'romantic',
+    content: '想你的每一天都是情人节，这份花礼替我传达心中的甜蜜与思念。',
+    bgGradient: 'linear-gradient(135deg, #FF80AB 0%, #FF4081 100%)'
+  },
+  {
+    id: 'birthday-1',
+    name: '生日快乐',
+    category: 'birthday',
+    content: '生日快乐！愿你的每一天都如鲜花般绚烂，如阳光般温暖。',
+    bgGradient: 'linear-gradient(135deg, #FF9F43 0%, #FFBE76 100%)'
+  },
+  {
+    id: 'birthday-2',
+    name: '岁岁年年',
+    category: 'birthday',
+    content: '岁岁年年花相似，岁岁年年人更好。祝你生日快乐，万事顺遂！',
+    bgGradient: 'linear-gradient(135deg, #F9CA24 0%, #FF9F43 100%)'
+  },
+  {
+    id: 'blessing-1',
+    name: '感恩有你',
+    category: 'blessing',
+    content: '感恩生命中遇见您，愿这束花带去我最真挚的祝福与感激。',
+    bgGradient: 'linear-gradient(135deg, #A66CFF 0%, #7C4DFF 100%)'
+  },
+  {
+    id: 'blessing-2',
+    name: '温馨祝福',
+    category: 'blessing',
+    content: '送上最暖心的祝福，愿您身体健康，万事如意，笑口常开！',
+    bgGradient: 'linear-gradient(135deg, #CE93D8 0%, #A66CFF 100%)'
+  },
+  {
+    id: 'opening-1',
+    name: '开业大吉',
+    category: 'opening',
+    content: '恭贺开业大吉！祝生意兴隆，财源广进，前程似锦！',
+    bgGradient: 'linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%)'
+  },
+  {
+    id: 'opening-2',
+    name: '蒸蒸日上',
+    category: 'opening',
+    content: '祝贵店开业大吉，事业蒸蒸日上，日进斗金！',
+    bgGradient: 'linear-gradient(135deg, #FF8E53 0%, #FF6B6B 100%)'
+  }
+];
+
+var historicalOrders = [
+  {
+    id: 'HIST001',
+    productId: 1001,
+    productName: '挚爱一生',
+    productImage: '/images/products/product1.png',
+    productPrice: 999,
+    quantity: 1,
+    category: 'romantic',
+    festivalId: 'valentines',
+    recipientName: '小美',
+    recipientPhone: '138****8000',
+    addressId: 1,
+    orderDate: '2025-02-14',
+    greetingCardContent: '亲爱的，情人节快乐！愿我们的爱情如这99朵玫瑰般热烈永恒。',
+    greetingCardId: 'love-1'
+  },
+  {
+    id: 'HIST002',
+    productId: 4001,
+    productName: '温馨祝福',
+    productImage: '/images/products/product5.png',
+    productPrice: 258,
+    quantity: 1,
+    category: 'blessing',
+    festivalId: 'mothers-day',
+    recipientName: '妈妈',
+    recipientPhone: '139****9000',
+    addressId: 2,
+    orderDate: '2025-05-11',
+    greetingCardContent: '妈妈，母亲节快乐！您辛苦了，愿您永远健康快乐！',
+    greetingCardId: 'blessing-1'
+  },
+  {
+    id: 'HIST003',
+    productId: 2001,
+    productName: '阳光灿烂',
+    productImage: '/images/products/product3.png',
+    productPrice: 268,
+    quantity: 1,
+    category: 'birthday',
+    festivalId: null,
+    recipientName: '小明',
+    recipientPhone: '137****7000',
+    addressId: 1,
+    orderDate: '2025-03-15',
+    greetingCardContent: '小明，生日快乐！愿你每一天都阳光灿烂！',
+    greetingCardId: 'birthday-1'
+  },
+  {
+    id: 'HIST004',
+    productId: 3001,
+    productName: '开业大吉',
+    productImage: '/images/products/product4.png',
+    productPrice: 688,
+    quantity: 1,
+    category: 'opening',
+    festivalId: 'national-day',
+    recipientName: '老王',
+    recipientPhone: '136****6000',
+    addressId: 2,
+    orderDate: '2025-10-01',
+    greetingCardContent: '祝开业大吉，生意兴隆！',
+    greetingCardId: 'opening-1'
+  },
+  {
+    id: 'HIST005',
+    productId: 1002,
+    productName: '初见倾心',
+    productImage: '/images/products/product2.png',
+    productPrice: 399,
+    quantity: 1,
+    category: 'romantic',
+    festivalId: '520',
+    recipientName: '小美',
+    recipientPhone: '138****8000',
+    addressId: 1,
+    orderDate: '2025-05-20',
+    greetingCardContent: '520，我爱你！从初见到如今，心动如故。',
+    greetingCardId: 'love-2'
+  }
+];
+
+function getFestivalById(id) {
+  for (var i = 0; i < festivalList.length; i++) {
+    if (festivalList[i].id === id) return festivalList[i];
+  }
+  return null;
+}
+
+function getUpcomingFestivals(days) {
+  var now = new Date();
+  var currentYear = now.getFullYear();
+  var result = [];
+  for (var i = 0; i < festivalList.length; i++) {
+    var f = festivalList[i];
+    var parts = f.date.split('-');
+    var fDate = new Date(currentYear, parseInt(parts[0]) - 1, parseInt(parts[1]));
+    if (fDate < now) {
+      fDate = new Date(currentYear + 1, parseInt(parts[0]) - 1, parseInt(parts[1]));
+    }
+    var diff = Math.ceil((fDate - now) / (1000 * 60 * 60 * 24));
+    if (diff >= 0 && diff <= days) {
+      result.push(Object.assign({}, f, {
+        dateObj: fDate,
+        daysAway: diff,
+        displayText: diff === 0 ? '今天' : diff + '天后'
+      }));
+    }
+  }
+  result.sort(function(a, b) { return a.daysAway - b.daysAway; });
+  return result;
+}
+
+function getRepurchaseRecommendations() {
+  var now = new Date();
+  var currentYear = now.getFullYear();
+  var recommendations = [];
+  for (var i = 0; i < historicalOrders.length; i++) {
+    var order = historicalOrders[i];
+    var orderDate = new Date(order.orderDate);
+    var lastYearDate = new Date(currentYear, orderDate.getMonth(), orderDate.getDate());
+    var diff = Math.ceil((lastYearDate - now) / (1000 * 60 * 60 * 24));
+    var festival = order.festivalId ? getFestivalById(order.festivalId) : null;
+    var originalProduct = getProductById(order.productId);
+    var upgradedProduct = null;
+    if (originalProduct) {
+      var sameCategory = productList.filter(function(p) {
+        return p.category === originalProduct.category && p.id !== originalProduct.id && p.price > originalProduct.price;
+      });
+      if (sameCategory.length > 0) {
+        sameCategory.sort(function(a, b) { return a.price - b.price; });
+        upgradedProduct = sameCategory[0];
+      }
+    }
+    var card = null;
+    for (var j = 0; j < greetingCardTemplates.length; j++) {
+      if (greetingCardTemplates[j].id === order.greetingCardId) {
+        card = greetingCardTemplates[j];
+        break;
+      }
+    }
+    var addr = null;
+    for (var k = 0; k < addressList.length; k++) {
+      if (addressList[k].id === order.addressId) {
+        addr = addressList[k];
+        break;
+      }
+    }
+    var occasionName = festival ? festival.name : '纪念日';
+    var occasionEmoji = festival ? festival.emoji : '🎯';
+    var isNear = diff >= -3 && diff <= 30;
+    var displayDate = (orderDate.getMonth() + 1) + '月' + orderDate.getDate() + '日';
+    recommendations.push({
+      historicalOrder: order,
+      occasionName: occasionName,
+      occasionEmoji: occasionEmoji,
+      displayDate: displayDate,
+      daysAway: diff,
+      displayText: diff < 0 ? '已过' + Math.abs(diff) + '天' : diff === 0 ? '今天' : diff + '天后',
+      isNear: isNear,
+      originalProduct: originalProduct,
+      upgradedProduct: upgradedProduct,
+      greetingCard: card,
+      address: addr,
+      festival: festival
+    });
+  }
+  recommendations.sort(function(a, b) {
+    if (a.isNear && !b.isNear) return -1;
+    if (!a.isNear && b.isNear) return 1;
+    return a.daysAway - b.daysAway;
+  });
+  return recommendations;
+}
+
+function getGreetingCardsByCategory(category) {
+  return greetingCardTemplates.filter(function(c) { return c.category === category; });
+}
+
 module.exports = {
   bannerList,
   categoryEntries,
@@ -657,5 +989,12 @@ module.exports = {
   quizQuestions,
   quizRecommendations,
   quizDefaultRecommendation,
-  getQuizRecommendation
+  getQuizRecommendation,
+  festivalList,
+  greetingCardTemplates,
+  historicalOrders,
+  getFestivalById,
+  getUpcomingFestivals,
+  getRepurchaseRecommendations,
+  getGreetingCardsByCategory
 };
