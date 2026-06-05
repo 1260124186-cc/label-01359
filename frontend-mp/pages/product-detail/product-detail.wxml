@@ -2,15 +2,15 @@
 <view class="page-container" wx:if="{{product}}">
   <!-- 商品图片轮播 -->
   <view class="image-section">
-    <swiper 
+    <swiper
       class="image-swiper"
       indicator-dots="{{false}}"
       autoplay="{{false}}"
       circular
       bindchange="onImageChange"
     >
-      <swiper-item 
-        wx:for="{{product.images}}" 
+      <swiper-item
+        wx:for="{{product.images}}"
         wx:key="*this"
         bindtap="onPreviewImage"
       >
@@ -19,6 +19,10 @@
     </swiper>
     <view class="image-indicator">
       <text>{{currentImageIndex + 1}}/{{product.images.length}}</text>
+    </view>
+    <!-- 售罄标记 -->
+    <view wx:if="{{isSoldOut}}" class="sold-out-badge">
+      <text>已售罄</text>
     </view>
   </view>
 
@@ -32,20 +36,43 @@
       <text class="original-price">¥{{product.originalPrice}}</text>
       <view class="discount-tag">省¥{{product.originalPrice - product.price}}</view>
     </view>
-    
+
     <text class="product-name">{{product.name}}</text>
     <text class="product-subtitle">{{product.subtitle}}</text>
-    
+
     <view class="tags-row">
       <view wx:for="{{product.tags}}" wx:key="*this" class="tag">{{item}}</view>
     </view>
-    
+
     <view class="stats-row">
       <text class="stat-item">销量 {{product.sales}}</text>
       <text class="stat-divider">|</text>
       <text class="stat-item">评分 {{product.rating}}</text>
       <text class="stat-divider">|</text>
-      <text class="stat-item">库存 {{product.stock}}</text>
+      <text class="stat-item {{isSoldOut ? 'sold-out-text' : ''}}">库存 {{isSoldOut ? '售罄' : product.stock}}</text>
+    </view>
+  </view>
+
+  <!-- 价格趋势 (有降价提醒且非售罄时显示) -->
+  <view wx:if="{{priceHistory.length > 0 && !isSoldOut}}" class="price-trend-section">
+    <view class="section-title">价格趋势</view>
+    <view class="price-trend-list">
+      <view wx:for="{{priceHistory}}" wx:key="date" class="price-trend-item">
+        <text class="trend-date">{{item.date}}</text>
+        <text class="trend-price">¥{{item.price}}</text>
+      </view>
+    </view>
+    <view class="price-trend-tip">
+      <text>订阅降价提醒，商品降价时第一时间通知您</text>
+    </view>
+  </view>
+
+  <!-- 到货提醒提示 (售罄商品) -->
+  <view wx:if="{{isSoldOut}}" class="subscribe-notice restock-notice">
+    <view class="notice-icon">🔔</view>
+    <view class="notice-content">
+      <text class="notice-title">商品已售罄</text>
+      <text class="notice-desc">订阅到货提醒，补货后第一时间通知您</text>
     </view>
   </view>
 
@@ -81,15 +108,35 @@
   <!-- 底部占位 -->
   <view class="bottom-placeholder"></view>
 
-  <!-- 底部操作栏 - 简化版 -->
-  <view class="action-bar safe-area-bottom">
+  <!-- 底部操作栏 - 售罄状态 -->
+  <view wx:if="{{isSoldOut}}" class="action-bar safe-area-bottom">
     <view class="action-left">
       <view class="cart-btn" bindtap="onGoCart">
         <text class="cart-icon">🛒</text>
         <text class="cart-text">购物车</text>
       </view>
     </view>
-    
+    <view class="action-right sold-out-actions">
+      <view class="subscribe-btn restock-btn {{restockSubscribed ? 'subscribed' : ''}}" bindtap="onSubscribeRestock">
+        <text class="subscribe-icon">{{restockSubscribed ? '✓' : '🔔'}}</text>
+        <text class="subscribe-text">{{restockSubscribed ? '已订阅到货提醒' : '到货提醒'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部操作栏 - 正常状态 -->
+  <view wx:else class="action-bar safe-area-bottom">
+    <view class="action-left">
+      <view class="cart-btn" bindtap="onGoCart">
+        <text class="cart-icon">🛒</text>
+        <text class="cart-text">购物车</text>
+      </view>
+      <view class="subscribe-mini-btn {{priceDropSubscribed ? 'subscribed' : ''}}" bindtap="onSubscribePriceDrop">
+        <text class="subscribe-mini-icon">{{priceDropSubscribed ? '✓' : '📉'}}</text>
+        <text class="subscribe-mini-text">{{priceDropSubscribed ? '已订阅' : '降价提醒'}}</text>
+      </view>
+    </view>
+
     <view class="action-right">
       <view class="quantity-control">
         <view class="quantity-btn decrease" bindtap="onDecrease">
@@ -100,7 +147,7 @@
           <text>+</text>
         </view>
       </view>
-      
+
       <view class="add-cart-btn" bindtap="onAddToCart">
         <text>加入购物车</text>
       </view>

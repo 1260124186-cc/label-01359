@@ -1,0 +1,105 @@
+<!--pages/subscription/subscription.wxml - 我的提醒页面-->
+<view class="page-container">
+  <!-- 顶部标签切换 -->
+  <view class="tab-bar">
+    <view
+      wx:for="{{tabs}}"
+      wx:key="id"
+      class="tab-item {{activeTab === item.id ? 'active' : ''}}"
+      bindtap="onTabChange"
+      data-id="{{item.id}}"
+    >
+      <text>{{item.name}}</text>
+      <view wx:if="{{activeTab === item.id}}" class="tab-indicator"></view>
+    </view>
+  </view>
+
+  <!-- 订阅列表 -->
+  <view wx:if="{{filteredList.length > 0}}" class="subscription-list">
+    <view
+      wx:for="{{filteredList}}"
+      wx:key="id"
+      class="subscription-card"
+      bindtap="onGoToProduct"
+      data-id="{{item.productId}}"
+    >
+      <view class="card-left">
+        <image class="product-image" src="{{item.productImage}}" mode="aspectFill" />
+        <view wx:if="{{item.type === 'restock'}}" class="type-badge restock-badge">到货</view>
+        <view wx:if="{{item.type === 'priceDrop'}}" class="type-badge price-badge">降价</view>
+      </view>
+      <view class="card-content">
+        <text class="card-name">{{item.productName}}</text>
+        <view class="card-info">
+          <text wx:if="{{item.type === 'restock'}}" class="info-text">订阅价格：¥{{item.productPrice || item.subscribePrice}}</text>
+          <text wx:if="{{item.type === 'priceDrop'}}" class="info-text">订阅价格：¥{{item.subscribePrice}}</text>
+          <text class="info-time">{{item.subscribeTime}}</text>
+        </view>
+        <view class="card-status">
+          <view wx:if="{{item.status === 'active'}}" class="status-tag active-tag">提醒中</view>
+          <view wx:if="{{item.status === 'notified'}}" class="status-tag notified-tag">已通知</view>
+          <view wx:if="{{item.isAvailable && item.type === 'restock'}}" class="status-tip restock-tip">已到货</view>
+          <view wx:if="{{item.priceDropped && item.type === 'priceDrop'}}" class="status-tip price-tip">已降价¥{{item.priceDropAmount}}</view>
+        </view>
+      </view>
+      <view class="card-action" catchtap="onCancelSubscription" data-id="{{item.id}}" data-name="{{item.productName}}">
+        <text class="action-text">{{item.status === 'active' ? '取消' : '删除'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view wx:if="{{filteredList.length === 0}}" class="empty-state">
+    <view class="empty-icon">🔔</view>
+    <text class="empty-title">暂无提醒</text>
+    <text class="empty-desc">
+      {{activeTab === 'restock' ? '售罄商品可订阅到货提醒' : activeTab === 'priceDrop' ? '商品可订阅降价提醒' : '浏览商品时订阅到货/降价提醒'}}
+    </text>
+    <view class="empty-btn" bindtap="onGoBrowse">
+      <text>去逛逛</text>
+    </view>
+  </view>
+
+  <!-- 底部模拟操作(开发调试) -->
+  <view class="simulate-section">
+    <view class="simulate-title">模拟推送</view>
+    <view class="simulate-btns">
+      <view class="simulate-btn restock-simulate" bindtap="onSimulateRestock">
+        <text>模拟到货通知</text>
+      </view>
+      <view class="simulate-btn price-simulate" bindtap="onSimulatePriceDrop">
+        <text>模拟降价通知</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 通知弹窗 -->
+  <view wx:if="{{showNotificationModal}}" class="modal-mask" bindtap="onCloseNotification">
+    <view class="modal-content" catchtap="">
+      <view class="modal-header">
+        <text class="modal-title">新消息提醒</text>
+        <view class="modal-close" bindtap="onCloseNotification">
+          <text>✕</text>
+        </view>
+      </view>
+      <view class="modal-body">
+        <view
+          wx:for="{{notifications}}"
+          wx:key="productId"
+          class="notification-item"
+        >
+          <view class="notification-icon-wrapper">
+            <text class="notification-icon">{{item.type === 'restock' ? '🔔' : '📉'}}</text>
+          </view>
+          <view class="notification-info">
+            <text class="notification-msg">{{item.message}}</text>
+            <text class="notification-time">{{item.time}}</text>
+          </view>
+          <view class="notification-action" catchtap="onNotificationAction" data-id="{{item.productId}}">
+            <text>查看</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

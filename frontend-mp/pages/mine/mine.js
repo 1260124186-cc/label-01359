@@ -6,6 +6,7 @@ Page({
   data: {
     userInfo: null,
     isLogin: false,
+    subscriptionCount: 0,
     orderMenus: [
       { id: 'unpaid', name: '待付款', icon: '💳', count: 0 },
       { id: 'unshipped', name: '待发货', icon: '📦', count: 0 },
@@ -22,12 +23,13 @@ Page({
     this.checkLoginStatus();
     this.updateCartBadge();
     this.updateOrderCounts();
+    this.updateSubscriptionCount();
   },
 
   // 检查登录状态
   checkLoginStatus: function() {
     var isLogin = app.globalData.isLogin;
-    
+
     if (isLogin) {
       var userInfo = mockData.userInfo;
       this.setData({ userInfo: userInfo, isLogin: true });
@@ -42,17 +44,17 @@ Page({
     var that = this;
     var orders = wx.getStorageSync('orders') || [];
     var counts = { unpaid: 0, unshipped: 0, unreceived: 0, completed: 0 };
-    
+
     orders.forEach(function(order) {
       if (counts[order.status] !== undefined) {
         counts[order.status]++;
       }
     });
-    
+
     var orderMenus = that.data.orderMenus.map(function(menu) {
       return Object.assign({}, menu, { count: counts[menu.id] || 0 });
     });
-    
+
     that.setData({ orderMenus: orderMenus });
   },
 
@@ -79,10 +81,10 @@ Page({
           var userInfo = mockData.userInfo;
           wx.setStorageSync('userInfo', userInfo);
           wx.setStorageSync('token', 'mock_token_' + Date.now());
-          
+
           app.globalData.isLogin = true;
           app.globalData.userInfo = userInfo;
-          
+
           that.checkLoginStatus();
           that.updateCartBadge();
           app.showToast('登录成功', 'success');
@@ -94,12 +96,12 @@ Page({
   // 点击订单菜单
   onOrderMenuTap: function(e) {
     var item = e.currentTarget.dataset.item;
-    
+
     if (!this.data.isLogin) {
       this.doLogin();
       return;
     }
-    
+
     wx.navigateTo({
       url: '/pages/order-list/order-list?tab=' + item.id
     });
@@ -111,9 +113,27 @@ Page({
       this.doLogin();
       return;
     }
-    
+
     wx.navigateTo({
       url: '/pages/order-list/order-list?tab=all'
+    });
+  },
+
+  // 更新提醒数量
+  updateSubscriptionCount: function() {
+    var subscriptions = wx.getStorageSync('subscriptions') || [];
+    var activeCount = subscriptions.filter(function(s) { return s.status === 'active'; }).length;
+    this.setData({ subscriptionCount: activeCount });
+  },
+
+  // 跳转提醒页面
+  onGoSubscription: function() {
+    if (!this.data.isLogin) {
+      this.doLogin();
+      return;
+    }
+    wx.navigateTo({
+      url: '/pages/subscription/subscription'
     });
   },
 
@@ -121,7 +141,7 @@ Page({
   onLogout: function() {
     var that = this;
     if (!that.data.isLogin) return;
-    
+
     wx.showModal({
       title: '提示',
       content: '确定要退出登录吗？',
@@ -130,10 +150,10 @@ Page({
         if (res.confirm) {
           wx.removeStorageSync('userInfo');
           wx.removeStorageSync('token');
-          
+
           app.globalData.isLogin = false;
           app.globalData.userInfo = null;
-          
+
           that.setData({ userInfo: null, isLogin: false });
           // 退出登录后隐藏购物车角标
           app.updateCartCount(0);

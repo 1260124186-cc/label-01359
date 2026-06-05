@@ -32,6 +32,29 @@
   color: #FFFFFF;
 }
 
+.sold-out-badge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.35);
+  z-index: 2;
+}
+
+.sold-out-badge text {
+  padding: 16rpx 48rpx;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 8rpx;
+  font-size: 36rpx;
+  color: #FFFFFF;
+  font-weight: 600;
+  letter-spacing: 8rpx;
+}
+
 /* 商品信息 */
 .info-section {
   background-color: #FFFFFF;
@@ -120,9 +143,94 @@
   color: #999999;
 }
 
+.sold-out-text {
+  color: #F44336;
+  font-weight: 500;
+}
+
 .stat-divider {
   margin: 0 20rpx;
   color: #EEEEEE;
+}
+
+/* 价格趋势 */
+.price-trend-section {
+  background-color: #FFFFFF;
+  padding: 32rpx;
+  margin-bottom: 20rpx;
+}
+
+.price-trend-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  margin-bottom: 20rpx;
+}
+
+.price-trend-item {
+  display: flex;
+  align-items: center;
+  padding: 12rpx 20rpx;
+  background-color: #FFF8F9;
+  border-radius: 12rpx;
+  border: 1rpx solid #FCE4EC;
+}
+
+.trend-date {
+  font-size: 24rpx;
+  color: #999999;
+  margin-right: 16rpx;
+}
+
+.trend-price {
+  font-size: 26rpx;
+  color: #E91E63;
+  font-weight: 500;
+}
+
+.price-trend-tip {
+  padding: 16rpx 24rpx;
+  background: linear-gradient(135deg, #FFF0F5 0%, #FCE4EC 100%);
+  border-radius: 12rpx;
+  font-size: 24rpx;
+  color: #E91E63;
+}
+
+/* 订阅提醒提示 */
+.subscribe-notice {
+  display: flex;
+  align-items: center;
+  margin: 0 0 20rpx;
+  padding: 24rpx 32rpx;
+  background-color: #FFFFFF;
+}
+
+.restock-notice {
+  background: linear-gradient(135deg, #FFF8F0 0%, #FFF0E0 100%);
+}
+
+.notice-icon {
+  font-size: 48rpx;
+  margin-right: 24rpx;
+  flex-shrink: 0;
+}
+
+.notice-content {
+  flex: 1;
+}
+
+.notice-title {
+  display: block;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333333;
+}
+
+.notice-desc {
+  display: block;
+  font-size: 24rpx;
+  color: #999999;
+  margin-top: 8rpx;
 }
 
 /* 商品描述 */
@@ -179,7 +287,7 @@
   height: 40rpx;
 }
 
-/* 底部操作栏 - 简化版 */
+/* 底部操作栏 */
 .action-bar {
   position: fixed;
   bottom: 0;
@@ -194,7 +302,10 @@
 }
 
 .action-left {
-  margin-right: 24rpx;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  margin-right: 16rpx;
 }
 
 .cart-btn {
@@ -214,6 +325,34 @@
   margin-top: 4rpx;
 }
 
+/* 降价提醒小按钮(正常状态底部) */
+.subscribe-mini-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8rpx 16rpx;
+  border-radius: 12rpx;
+}
+
+.subscribe-mini-btn.subscribed {
+  background-color: #FFF0F5;
+}
+
+.subscribe-mini-icon {
+  font-size: 36rpx;
+}
+
+.subscribe-mini-text {
+  font-size: 20rpx;
+  color: #666666;
+  margin-top: 4rpx;
+  white-space: nowrap;
+}
+
+.subscribe-mini-btn.subscribed .subscribe-mini-text {
+  color: #E91E63;
+}
+
 .action-right {
   flex: 1;
   display: flex;
@@ -222,6 +361,59 @@
   gap: 16rpx;
 }
 
+/* 售罄状态底部 */
+.sold-out-actions {
+  flex: 1;
+  justify-content: center;
+}
+
+.subscribe-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24rpx 0;
+  border-radius: 40rpx;
+  flex: 1;
+  transition: all 0.2s ease;
+}
+
+.restock-btn {
+  background: linear-gradient(135deg, #FF9800 0%, #FFB74D 100%);
+}
+
+.restock-btn.subscribed {
+  background: #FFFFFF;
+  border: 2rpx solid #FF9800;
+}
+
+.subscribe-icon {
+  font-size: 32rpx;
+  margin-right: 12rpx;
+}
+
+.restock-btn .subscribe-icon {
+  color: #FFFFFF;
+}
+
+.restock-btn.subscribed .subscribe-icon {
+  color: #FF9800;
+}
+
+.subscribe-text {
+  font-size: 30rpx;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.restock-btn .subscribe-text {
+  color: #FFFFFF;
+}
+
+.restock-btn.subscribed .subscribe-text {
+  color: #FF9800;
+}
+
+/* 数量控制 */
 .quantity-control {
   display: flex;
   align-items: center;

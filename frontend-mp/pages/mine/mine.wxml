@@ -20,9 +20,9 @@
         <!-- 头像和信息 -->
         <view class="user-info">
           <view class="avatar-wrapper">
-            <image 
-              class="avatar" 
-              src="{{userInfo.avatar}}" 
+            <image
+              class="avatar"
+              src="{{userInfo.avatar}}"
               mode="aspectFill"
             />
           </view>
@@ -44,8 +44,8 @@
         </view>
       </view>
       <view class="order-menu">
-        <view 
-          wx:for="{{orderMenus}}" 
+        <view
+          wx:for="{{orderMenus}}"
           wx:key="id"
           class="order-item"
           bindtap="onOrderMenuTap"
@@ -56,6 +56,27 @@
             <view wx:if="{{item.count > 0}}" class="order-badge">{{item.count}}</view>
           </view>
           <text class="order-name">{{item.name}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 我的提醒 -->
+    <view class="service-section subscription-entry" bindtap="onGoSubscription">
+      <view class="section-header">
+        <text class="section-title">我的提醒</text>
+        <view class="section-more">
+          <view wx:if="{{subscriptionCount > 0}}" class="subscription-badge">{{subscriptionCount}}</view>
+          <text class="arrow">›</text>
+        </view>
+      </view>
+      <view class="subscription-summary">
+        <view class="summary-item">
+          <text class="summary-icon">🔔</text>
+          <text class="summary-text">到货提醒</text>
+        </view>
+        <view class="summary-item">
+          <text class="summary-icon">📉</text>
+          <text class="summary-text">降价提醒</text>
         </view>
       </view>
     </view>

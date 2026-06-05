@@ -198,6 +198,36 @@ const productList = [
     images: ['/images/products/product5.png'],
     description: '康乃馨与百合的温馨组合，送去真挚祝福',
     stock: 100
+  },
+  {
+    id: 5001,
+    name: '永恒之恋',
+    subtitle: '永生花礼盒限定款',
+    price: 599,
+    originalPrice: 799,
+    sales: 3200,
+    rating: 4.9,
+    category: 'romantic',
+    tags: ['爆款', '限量'],
+    imageUrl: '/images/products/product1.png',
+    images: ['/images/products/product1.png'],
+    description: '精选进口永生花材，永恒不变的美丽承诺，限定款礼盒包装',
+    stock: 0
+  },
+  {
+    id: 5002,
+    name: '春日物语',
+    subtitle: '郁金香混搭花束',
+    price: 358,
+    originalPrice: 458,
+    sales: 1200,
+    rating: 4.7,
+    category: 'birthday',
+    tags: ['新品', '生日推荐'],
+    imageUrl: '/images/products/product3.png',
+    images: ['/images/products/product3.png'],
+    description: '荷兰进口郁金香混搭，春日般温暖问候',
+    stock: 0
   }
 ];
 
@@ -230,7 +260,7 @@ const getProductById = (id) => {
  */
 const searchProducts = (keyword) => {
   const lowerKeyword = keyword.toLowerCase();
-  return productList.filter(p => 
+  return productList.filter(p =>
     p.name.toLowerCase().includes(lowerKeyword) ||
     p.subtitle.toLowerCase().includes(lowerKeyword) ||
     p.description.toLowerCase().includes(lowerKeyword)
@@ -282,6 +312,115 @@ const addressList = [
   }
 ];
 
+var priceHistory = {
+  1001: [
+    { price: 1299, date: '2024-01-01' },
+    { price: 1199, date: '2024-03-15' },
+    { price: 1099, date: '2024-06-01' },
+    { price: 999, date: '2024-09-01' }
+  ],
+  1002: [
+    { price: 499, date: '2024-01-01' },
+    { price: 449, date: '2024-04-01' },
+    { price: 399, date: '2024-07-01' }
+  ],
+  2001: [
+    { price: 328, date: '2024-01-01' },
+    { price: 298, date: '2024-05-01' },
+    { price: 268, date: '2024-08-01' }
+  ],
+  3001: [
+    { price: 888, date: '2024-01-01' },
+    { price: 788, date: '2024-04-01' },
+    { price: 688, date: '2024-07-01' }
+  ],
+  4001: [
+    { price: 318, date: '2024-01-01' },
+    { price: 288, date: '2024-05-01' },
+    { price: 258, date: '2024-08-01' }
+  ]
+};
+
+var subscriptionList = [];
+
+function addSubscription(sub) {
+  var exist = subscriptionList.find(function(s) {
+    return s.productId === sub.productId && s.type === sub.type;
+  });
+  if (exist) return false;
+  subscriptionList.push(Object.assign({}, sub, {
+    id: Date.now(),
+    subscribeTime: new Date().toLocaleString(),
+    status: 'active'
+  }));
+  return true;
+}
+
+function removeSubscription(id) {
+  var index = subscriptionList.findIndex(function(s) { return s.id === id; });
+  if (index > -1) {
+    subscriptionList.splice(index, 1);
+    return true;
+  }
+  return false;
+}
+
+function getSubscriptions() {
+  return subscriptionList;
+}
+
+function isSubscribed(productId, type) {
+  return subscriptionList.some(function(s) {
+    return s.productId === productId && s.type === type && s.status === 'active';
+  });
+}
+
+function simulateRestockNotification() {
+  var restockSubs = subscriptionList.filter(function(s) {
+    return s.type === 'restock' && s.status === 'active';
+  });
+  var notifications = [];
+  restockSubs.forEach(function(sub) {
+    var product = productList.find(function(p) { return p.id === sub.productId; });
+    if (product && product.stock > 0) {
+      sub.status = 'notified';
+      notifications.push({
+        productId: sub.productId,
+        productName: sub.productName,
+        productImage: sub.productImage,
+        type: 'restock',
+        message: '您关注的「' + sub.productName + '」已到货，快来选购吧！',
+        time: new Date().toLocaleString()
+      });
+    }
+  });
+  return notifications;
+}
+
+function simulatePriceDropNotification() {
+  var priceSubs = subscriptionList.filter(function(s) {
+    return s.type === 'priceDrop' && s.status === 'active';
+  });
+  var notifications = [];
+  priceSubs.forEach(function(sub) {
+    var product = productList.find(function(p) { return p.id === sub.productId; });
+    if (product && product.price < sub.subscribePrice) {
+      sub.status = 'notified';
+      notifications.push({
+        productId: sub.productId,
+        productName: sub.productName,
+        productImage: sub.productImage,
+        type: 'priceDrop',
+        oldPrice: sub.subscribePrice,
+        newPrice: product.price,
+        message: '您关注的「' + sub.productName + '」已降价，从¥' + sub.subscribePrice + '降至¥' + product.price,
+        time: new Date().toLocaleString()
+      });
+    }
+  });
+  return notifications;
+}
+
 module.exports = {
   bannerList,
   categoryEntries,
@@ -293,5 +432,12 @@ module.exports = {
   getProductById,
   searchProducts,
   userInfo,
-  addressList
+  addressList,
+  priceHistory,
+  addSubscription,
+  removeSubscription,
+  getSubscriptions,
+  isSubscribed,
+  simulateRestockNotification,
+  simulatePriceDropNotification
 };

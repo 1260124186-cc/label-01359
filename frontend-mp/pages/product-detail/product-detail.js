@@ -8,7 +8,11 @@ Page({
     currentImageIndex: 0,
     quantity: 1,
     loading: true,
-    error: null
+    error: null,
+    isSoldOut: false,
+    restockSubscribed: false,
+    priceDropSubscribed: false,
+    priceHistory: []
   },
 
   onLoad: function(options) {
@@ -22,6 +26,7 @@ Page({
 
   onShow: function() {
     this.updateCartBadge();
+    this.checkSubscriptionStatus();
   },
 
   onShareAppMessage: function() {
@@ -33,17 +38,25 @@ Page({
     };
   },
 
-  // 加载商品详情
   loadProductDetail: function(id) {
     var that = this;
     that.setData({ loading: true, error: null });
-    
+
     setTimeout(function() {
       var product = mockData.getProductById(id);
-      
+
       if (product) {
         wx.setNavigationBarTitle({ title: product.name });
-        that.setData({ product: product, loading: false });
+        var isSoldOut = product.stock <= 0;
+        var priceHistory = mockData.priceHistory[product.id] || [];
+        that.setData({
+          product: product,
+          loading: false,
+          isSoldOut: isSoldOut,
+          priceHistory: priceHistory,
+          quantity: isSoldOut ? 0 : 1
+        });
+        that.checkSubscriptionStatus();
       } else {
         that.setData({ loading: false, error: '商品不存在' });
         setTimeout(function() {
@@ -53,7 +66,24 @@ Page({
     }, 300);
   },
 
-  // 更新购物车角标
+  checkSubscriptionStatus: function() {
+    var product = this.data.product;
+    if (!product) return;
+
+    var subscriptions = wx.getStorageSync('subscriptions') || [];
+    var restockSubscribed = subscriptions.some(function(s) {
+      return s.productId === product.id && s.type === 'restock' && s.status === 'active';
+    });
+    var priceDropSubscribed = subscriptions.some(function(s) {
+      return s.productId === product.id && s.type === 'priceDrop' && s.status === 'active';
+    });
+
+    this.setData({
+      restockSubscribed: restockSubscribed,
+      priceDropSubscribed: priceDropSubscribed
+    });
+  },
+
   updateCartBadge: function() {
     try {
       var cart = wx.getStorageSync('cart') || [];
@@ -63,7 +93,6 @@ Page({
     }
   },
 
-  // 重试加载
   onRetry: function() {
     var pages = getCurrentPages();
     var currentPage = pages[pages.length - 1];
@@ -73,31 +102,27 @@ Page({
     }
   },
 
-  // 图片切换
   onImageChange: function(e) {
     this.setData({ currentImageIndex: e.detail.current });
   },
 
-  // 预览图片
   onPreviewImage: function() {
     var product = this.data.product;
     var currentImageIndex = this.data.currentImageIndex;
     if (!product || !product.images || !product.images.length) return;
-    
+
     wx.previewImage({
       current: product.images[currentImageIndex],
       urls: product.images
     });
   },
 
-  // 减少数量
   onDecrease: function() {
     if (this.data.quantity > 1) {
       this.setData({ quantity: this.data.quantity - 1 });
     }
   },
 
-  // 增加数量
   onIncrease: function() {
     var product = this.data.product;
     var quantity = this.data.quantity;
@@ -108,25 +133,22 @@ Page({
     }
   },
 
-  // 添加到购物车
   onAddToCart: function() {
     var product = this.data.product;
     var quantity = this.data.quantity;
     var that = this;
     if (!product) return;
-    
-    // 检查库存
+
     if (product.stock <= 0) {
       app.showToast('商品已售罄');
       return;
     }
-    
-    // 检查登录状态
+
     if (!app.globalData.isLogin) {
       that.showLoginModal();
       return;
     }
-    
+
     try {
       var cart = wx.getStorageSync('cart') || [];
       var existIndex = -1;
@@ -136,9 +158,8 @@ Page({
           break;
         }
       }
-      
+
       if (existIndex > -1) {
-        // 检查加购后是否超过库存
         if (cart[existIndex].quantity + quantity > product.stock) {
           app.showToast('库存不足');
           return;
@@ -147,10 +168,10 @@ Page({
       } else {
         cart.push(Object.assign({}, product, { quantity: quantity, selected: true }));
       }
-      
+
       wx.setStorageSync('cart', cart);
       that.updateCartBadge();
-      
+
       wx.showToast({ title: '添加成功', icon: 'success', duration: 1500 });
     } catch (error) {
       console.error('添加购物车失败:', error);
@@ -158,35 +179,134 @@ Page({
     }
   },
 
-  // 立即购买
   onBuyNow: function() {
     var product = this.data.product;
     var quantity = this.data.quantity;
     var that = this;
     if (!product) return;
-    
-    // 检查库存
+
     if (product.stock <= 0) {
       app.showToast('商品已售罄');
       return;
     }
-    
+
     if (quantity > product.stock) {
       app.showToast('库存不足');
       return;
     }
-    
+
     if (!app.globalData.isLogin) {
       that.showLoginModal();
       return;
     }
-    
+
     wx.navigateTo({
       url: '/pages/order-confirm/order-confirm?productId=' + product.id + '&quantity=' + quantity
     });
   },
 
-  // 显示登录弹窗
+  onSubscribeRestock: function() {
+    var that = this;
+    var product = this.data.product;
+    if (!product) return;
+
+    if (!app.globalData.isLogin) {
+      that.showLoginModal();
+      return;
+    }
+
+    if (that.data.restockSubscribed) {
+      that.unsubscribe(product.id, 'restock', function() {
+        that.setData({ restockSubscribed: false });
+        app.showToast('已取消到货提醒');
+      });
+      return;
+    }
+
+    var subscriptions = wx.getStorageSync('subscriptions') || [];
+    var exist = subscriptions.some(function(s) {
+      return s.productId === product.id && s.type === 'restock' && s.status === 'active';
+    });
+    if (exist) {
+      app.showToast('已订阅到货提醒');
+      return;
+    }
+
+    subscriptions.push({
+      id: Date.now(),
+      productId: product.id,
+      productName: product.name,
+      productImage: product.imageUrl,
+      productPrice: product.price,
+      type: 'restock',
+      subscribeTime: new Date().toLocaleString(),
+      status: 'active'
+    });
+    wx.setStorageSync('subscriptions', subscriptions);
+
+    that.setData({ restockSubscribed: true });
+    app.showToast('订阅成功，到货将通知您', 'success');
+  },
+
+  onSubscribePriceDrop: function() {
+    var that = this;
+    var product = this.data.product;
+    if (!product) return;
+
+    if (!app.globalData.isLogin) {
+      that.showLoginModal();
+      return;
+    }
+
+    if (that.data.priceDropSubscribed) {
+      that.unsubscribe(product.id, 'priceDrop', function() {
+        that.setData({ priceDropSubscribed: false });
+        app.showToast('已取消降价提醒');
+      });
+      return;
+    }
+
+    var subscriptions = wx.getStorageSync('subscriptions') || [];
+    var exist = subscriptions.some(function(s) {
+      return s.productId === product.id && s.type === 'priceDrop' && s.status === 'active';
+    });
+    if (exist) {
+      app.showToast('已订阅降价提醒');
+      return;
+    }
+
+    subscriptions.push({
+      id: Date.now(),
+      productId: product.id,
+      productName: product.name,
+      productImage: product.imageUrl,
+      subscribePrice: product.price,
+      type: 'priceDrop',
+      subscribeTime: new Date().toLocaleString(),
+      status: 'active'
+    });
+    wx.setStorageSync('subscriptions', subscriptions);
+
+    that.setData({ priceDropSubscribed: true });
+    app.showToast('订阅成功，降价将通知您', 'success');
+  },
+
+  unsubscribe: function(productId, type, callback) {
+    var subscriptions = wx.getStorageSync('subscriptions') || [];
+    var index = -1;
+    for (var i = 0; i < subscriptions.length; i++) {
+      if (subscriptions[i].productId === productId && subscriptions[i].type === type && subscriptions[i].status === 'active') {
+        index = i;
+        break;
+      }
+    }
+    if (index > -1) {
+      subscriptions.splice(index, 1);
+      wx.setStorageSync('subscriptions', subscriptions);
+      if (callback) callback();
+    }
+  },
+
   showLoginModal: function() {
     var that = this;
     wx.showModal({
@@ -206,10 +326,10 @@ Page({
                 var userInfo = mockData.userInfo;
                 wx.setStorageSync('userInfo', userInfo);
                 wx.setStorageSync('token', 'mock_token_' + Date.now());
-                
+
                 app.globalData.isLogin = true;
                 app.globalData.userInfo = userInfo;
-                
+
                 that.updateCartBadge();
                 app.showToast('登录成功', 'success');
               }
@@ -220,7 +340,6 @@ Page({
     });
   },
 
-  // 去购物车
   onGoCart: function() {
     wx.switchTab({ url: '/pages/cart/cart' });
   }

@@ -47,7 +47,9 @@ var STORAGE_KEYS = {
   CART: 'cart',
   ORDERS: 'orders',
   SEARCH_HISTORY: 'searchHistory',
-  ADDRESS_LIST: 'addressList'
+  ADDRESS_LIST: 'addressList',
+  SUBSCRIPTIONS: 'subscriptions',
+  NOTIFICATIONS: 'notifications'
 };
 
 /**

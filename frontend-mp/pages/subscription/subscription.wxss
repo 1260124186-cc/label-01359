@@ -1,0 +1,388 @@
+/* pages/subscription/subscription.wxss - 我的提醒页面样式 */
+
+.page-container {
+  min-height: 100vh;
+  background-color: #F5F5F5;
+}
+
+/* 标签切换 */
+.tab-bar {
+  display: flex;
+  background-color: #FFFFFF;
+  padding: 0 24rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.tab-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24rpx 0;
+  position: relative;
+  font-size: 28rpx;
+  color: #999999;
+}
+
+.tab-item.active {
+  color: #E91E63;
+  font-weight: 600;
+}
+
+.tab-indicator {
+  position: absolute;
+  bottom: 0;
+  width: 48rpx;
+  height: 6rpx;
+  background: linear-gradient(135deg, #E91E63 0%, #FF4081 100%);
+  border-radius: 3rpx;
+}
+
+/* 订阅列表 */
+.subscription-list {
+  padding: 24rpx;
+}
+
+.subscription-card {
+  display: flex;
+  align-items: center;
+  background-color: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
+}
+
+.card-left {
+  position: relative;
+  width: 160rpx;
+  height: 160rpx;
+  flex-shrink: 0;
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+}
+
+.type-badge {
+  position: absolute;
+  top: 8rpx;
+  left: 8rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+  font-size: 20rpx;
+  color: #FFFFFF;
+}
+
+.restock-badge {
+  background: linear-gradient(135deg, #FF9800 0%, #FFB74D 100%);
+}
+
+.price-badge {
+  background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+}
+
+.card-content {
+  flex: 1;
+  margin-left: 24rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 160rpx;
+}
+
+.card-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333333;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-info {
+  margin-top: 12rpx;
+}
+
+.info-text {
+  display: block;
+  font-size: 26rpx;
+  color: #E91E63;
+  font-weight: 500;
+}
+
+.info-time {
+  display: block;
+  font-size: 22rpx;
+  color: #CCCCCC;
+  margin-top: 4rpx;
+}
+
+.card-status {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-top: 12rpx;
+}
+
+.status-tag {
+  padding: 4rpx 16rpx;
+  border-radius: 8rpx;
+  font-size: 22rpx;
+}
+
+.active-tag {
+  background-color: #FFF0F5;
+  color: #E91E63;
+}
+
+.notified-tag {
+  background-color: #F0FFF0;
+  color: #4CAF50;
+}
+
+.status-tip {
+  font-size: 22rpx;
+  font-weight: 500;
+}
+
+.restock-tip {
+  color: #FF9800;
+}
+
+.price-tip {
+  color: #4CAF50;
+}
+
+.card-action {
+  flex-shrink: 0;
+  margin-left: 16rpx;
+  padding: 12rpx 24rpx;
+  border: 1rpx solid #EEEEEE;
+  border-radius: 24rpx;
+}
+
+.action-text {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.card-action:active {
+  background-color: #F5F5F5;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 160rpx 0;
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  margin-bottom: 32rpx;
+}
+
+.empty-title {
+  font-size: 32rpx;
+  color: #333333;
+  font-weight: 500;
+  margin-bottom: 16rpx;
+}
+
+.empty-desc {
+  font-size: 28rpx;
+  color: #999999;
+  margin-bottom: 48rpx;
+  text-align: center;
+  padding: 0 80rpx;
+}
+
+.empty-btn {
+  padding: 20rpx 80rpx;
+  background: linear-gradient(135deg, #E91E63 0%, #FF4081 100%);
+  border-radius: 40rpx;
+  box-shadow: 0 8rpx 24rpx rgba(233, 30, 99, 0.3);
+}
+
+.empty-btn text {
+  color: #FFFFFF;
+  font-size: 30rpx;
+  font-weight: 500;
+}
+
+/* 模拟操作区 */
+.simulate-section {
+  margin: 24rpx;
+  padding: 24rpx;
+  background-color: #FFFFFF;
+  border-radius: 24rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
+}
+
+.simulate-title {
+  font-size: 26rpx;
+  color: #999999;
+  margin-bottom: 20rpx;
+}
+
+.simulate-btns {
+  display: flex;
+  gap: 20rpx;
+}
+
+.simulate-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20rpx 0;
+  border-radius: 12rpx;
+  border: 1rpx dashed #CCCCCC;
+}
+
+.restock-simulate {
+  border-color: #FFB74D;
+}
+
+.restock-simulate text {
+  color: #FF9800;
+  font-size: 26rpx;
+}
+
+.price-simulate {
+  border-color: #66BB6A;
+}
+
+.price-simulate text {
+  color: #4CAF50;
+  font-size: 26rpx;
+}
+
+.simulate-btn:active {
+  background-color: #F5F5F5;
+}
+
+/* 通知弹窗 */
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  width: 640rpx;
+  background-color: #FFFFFF;
+  border-radius: 24rpx;
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32rpx;
+  border-bottom: 1rpx solid #F5F5F5;
+}
+
+.modal-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333333;
+}
+
+.modal-close {
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: #F5F5F5;
+}
+
+.modal-close text {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.modal-body {
+  padding: 24rpx 32rpx 32rpx;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.notification-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #F5F5F5;
+}
+
+.notification-item:last-child {
+  border-bottom: none;
+}
+
+.notification-icon-wrapper {
+  width: 72rpx;
+  height: 72rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #FFF8F9;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.notification-icon {
+  font-size: 36rpx;
+}
+
+.notification-info {
+  flex: 1;
+  margin-left: 20rpx;
+}
+
+.notification-msg {
+  display: block;
+  font-size: 28rpx;
+  color: #333333;
+  line-height: 1.5;
+}
+
+.notification-time {
+  display: block;
+  font-size: 22rpx;
+  color: #CCCCCC;
+  margin-top: 8rpx;
+}
+
+.notification-action {
+  flex-shrink: 0;
+  margin-left: 16rpx;
+  padding: 12rpx 24rpx;
+  background: linear-gradient(135deg, #E91E63 0%, #FF4081 100%);
+  border-radius: 24rpx;
+}
+
+.notification-action text {
+  font-size: 24rpx;
+  color: #FFFFFF;
+}

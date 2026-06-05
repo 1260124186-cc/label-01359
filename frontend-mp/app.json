@@ -11,7 +11,8 @@
     "pages/order-pay/order-pay",
     "pages/order-result/order-result",
     "pages/order-list/order-list",
-    "pages/order-detail/order-detail"
+    "pages/order-detail/order-detail",
+    "pages/subscription/subscription"
   ],
   "window": {
     "backgroundTextStyle": "dark",

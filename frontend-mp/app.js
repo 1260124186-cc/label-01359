@@ -22,6 +22,7 @@ App({
     this.initStorage();
     this.checkLoginStatus();
     this.getSystemInfo();
+    this.checkPendingNotifications();
   },
 
   // 初始化本地存储
@@ -68,13 +69,13 @@ App({
   // 更新购物车数量
   updateCartCount: function(count) {
     this.globalData.cartCount = count;
-    
+
     // 未登录时不显示角标
     if (!this.globalData.isLogin) {
       wx.removeTabBarBadge({ index: 2 });
       return;
     }
-    
+
     if (count > 0) {
       wx.setTabBarBadge({
         index: 2,
@@ -82,6 +83,23 @@ App({
       });
     } else {
       wx.removeTabBarBadge({ index: 2 });
+    }
+  },
+
+  // 检查待推送的通知
+  checkPendingNotifications: function() {
+    try {
+      var notifications = wx.getStorageSync('notifications') || [];
+      if (notifications.length > 0 && this.globalData.isLogin) {
+        var message = notifications[0].message;
+        wx.showToast({
+          title: message,
+          icon: 'none',
+          duration: 3000
+        });
+      }
+    } catch (e) {
+      console.error('检查通知失败:', e);
     }
   },
 

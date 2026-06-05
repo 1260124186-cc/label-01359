@@ -73,6 +73,26 @@
   border-radius: 8rpx;
 }
 
+.sold-out-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sold-out-text {
+  padding: 4rpx 20rpx;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #FFFFFF;
+  font-size: 24rpx;
+  border-radius: 4rpx;
+}
+
 /* 商品信息 */
 .product-info {
   padding: 20rpx;
@@ -155,4 +175,20 @@
   justify-content: center;
   width: 100%;
   height: 100%;
+}
+
+.restock-hint {
+  width: 52rpx;
+  height: 52rpx;
+  background-color: #FFF0F5;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.restock-icon {
+  font-size: 28rpx;
+  line-height: 1;
 }
